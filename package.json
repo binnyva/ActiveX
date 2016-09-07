@@ -1,0 +1,16 @@
+{
+  "name": "activex",
+  "version": "1.0.0",
+  "description": "A tool to capture what activity you are doing on the computer by collecting all window names.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Binny V A",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "async": "^2.0.1",
+    "bluebird": "^3.4.6",
+    "mongodb": "^2.2.9"
+  }
+}
