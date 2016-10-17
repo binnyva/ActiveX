@@ -75,6 +75,8 @@ function getAllWindows(stdout, stderr) {
 	snapshot.taken_at = new Date();
 	snapshot.tags = [];
 
+	console.log(snapshot);
+
 	var snapshot_collection = db.collection("Snapshot");
 	snapshot_collection.insertOne(snapshot, {}).then(function() {
 		// Go thru all windows

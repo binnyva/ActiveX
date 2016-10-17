@@ -1,0 +1,42 @@
+<link href="css/index.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+<?
+var last_snapshot_software = 'activex-holder-text';
+var snapshot_from = '';
+var snapshots_with_same_window_count = 0;
+for(var i=0; i<snapshots.length; i++) {
+	var snap = snapshots[i];
+
+	console.log(snapshots[i]);
+	if(snap.software == last_snapshot_software) {
+		snapshots_with_same_window_count++;
+?>
+	<span class="window">
+	<span class="window-software"><?= snap.software ?></span><br />
+	<span class="window-title"><?= snap.title ?>
+	</span>
+<? 
+
+} else { 
+
+if(last_snapshot_software != "activex-holder-text") { ?>
+	</div>
+	<span class="snapshot-time"><?= moment(snap.taken_at).format('lll'); ?></span>
+</div>
+<? } ?>
+
+<div class="row">
+<span class="snapshot-count pull-right"><?= snapshots_with_same_window_count ?></span>
+
+<span class="title"><span class="window-software"><?= snap.software ?></span> <span class="window-title"><?= snap.title ?></span><br />
+	<div class="repeat-snapshots">
+<? 	
+		last_snapshot_software = snap.software;
+		snapshots_with_same_window_count = 0;
+		snapshot_from = snap.taken_at;
+	}
+
+}?>
+</div>
+</div>

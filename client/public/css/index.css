@@ -1,0 +1,16 @@
+ 
+.row {
+	padding: 10px;
+	border-bottom: 1px dashed #999;
+}
+
+.repeat-snapshots {
+	display: none;
+}
+
+.window-software {
+	font-size: 130%;
+}
+.window-title {
+	color: #666;
+}
