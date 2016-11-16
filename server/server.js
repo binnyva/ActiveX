@@ -14,6 +14,8 @@ app.set('view options', { open: '<?', close: '?>', delimiter: '?'});
 app.use(express.static('client/public'));
 app.use(express.static('node_modules/'));
 
+hide_words = ['smplayer', '9gag', 'vlc', 'overwatch'];
+
 function main(err, database) {
 	if(err) return handleError(err);
 	db = database;
@@ -24,7 +26,7 @@ function main(err, database) {
 
 
 	app.get('/', function(req, res) {
-		require('./index.js').main(res, db, moment, app);
+		require('./index.js').main(req, res, app, db, moment);
 	});
 }
 

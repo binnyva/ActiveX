@@ -4,13 +4,30 @@
 	border-bottom: 1px dashed #999;
 }
 
-.repeat-snapshots {
-	display: none;
-}
-
 .window-software {
 	font-size: 130%;
 }
 .window-title {
 	color: #666;
+}
+.repeat-snapshots {
+	display: none;
+	padding-left: 30px;
+}
+.repeat-snapshots span {
+	font-size:14px;
+}
+
+div.selected {
+	background-color: #c6dcff;
+}
+
+/* Disable text selection */
+body{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
