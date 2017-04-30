@@ -38,8 +38,16 @@ function selectRow(e) {
 	}
 
 	last_click_row_number = row_number;
+}
 
-	console.log(e.shiftKey);
+function resizeWindow() {
+	if($(window).width() < 600) {
+		$('#date-changer').removeClass('btn-group').removeClass('btn-group-justified');
+		$('#date-changer').addClass('btn-group-vertical');
+	} else {
+		$('#date-changer').addClass('btn-group').addClass('btn-group-justified');
+		$('#date-changer').removeClass('btn-group-vertical');
+	}
 }
 
 
@@ -54,6 +62,11 @@ function pageInit() {
 			ele.hide();
 		}
 	});
+
+	resizeWindow();
 }
+
+$(window).resize(resizeWindow);
+
 
 $(pageInit);

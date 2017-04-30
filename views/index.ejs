@@ -24,48 +24,60 @@ var snapshots_with_same_window_count = 0;
 snapshot_loop:
 for(var i=0; i<snapshots.length; i++) {
 	var snap = snapshots[i];
+	var windows = snap.windows.reduce(function(all_windows, window) {
+		all_windows.push(window.window + "(" + window.desktop + ")");
+
+		return all_windows;
+	}, []);
 
 	if(snap.software == last_snapshot_software) { // Repeats are shown here.
 		snapshots_with_same_window_count++;
-?>
+		// snapshot_from = snap.taken_at;
+	?>
+
 	<span class="window">
-	<span class="window-software"><?= snap.software ?></span> 
-	<span class="window-title"><?= snap.title ?></span>
+		<span class="window-software"><?= snap.software ?></span> 
+		<span class="window-title"><?= snap.title ?> - <span class="window-count glyphicon glyphicon-th"><?= windows.length ?></span></span>
+		<ul class="window-all">
+			<li><?- windows.join("</li>\n			<li>") ?></li> 
+		</ul>
 	</span><br />
 <? 
+	} else {
 
-} else { 
+		// Hide things unless there is full disclosure.
+		if(!full_disclosure)
+		for(var index in hide_words) {
+			var word = hide_words[index];
+			if( snap.title.toLowerCase().indexOf(word) != -1 ||
+				snap.software.toLowerCase().indexOf(word) != -1) {
+					// console.log("Hiding: " + snap.software + " - " + snap.title, full_disclosure)
+					continue snapshot_loop;
+			}
+		}
 
-// Hide things unless there is full disclosure.
-if(!full_disclosure)
-for(var index in hide_words) {
-	var word = hide_words[index];
-	if( snap.title.toLowerCase().indexOf(word) != -1 ||
-		snap.software.toLowerCase().indexOf(word) != -1) {
-			// console.log("Hiding: " + snap.software + " - " + snap.title, full_disclosure)
-			continue snapshot_loop;
-	}
-}
-
-
-if(last_snapshot_software != "activex-holder-text") { ?>
-	</div>
-	<input type="checkbox" name="snapshot[]" class="row-selector" value="1" />
-	<span class="snapshot-time"><?= moment(snap.taken_at).format('lll'); ?></span>
-
-<? if(snapshots_with_same_window_count) { ?><span class="snapshot-count pull-right"><?= snapshots_with_same_window_count + 1 ?></span><? } ?>
+		if(last_snapshot_software != "activex-holder-text") { ?>
 </div>
+<input type="checkbox" name="snapshot[]" class="row-selector" value="1" />
+<span class="snapshot-time"><?= moment(snap.taken_at).format('LT') + " - " + moment(snapshot_from).format('LT'); ?></span>
+
+<? 			if(snapshots_with_same_window_count) { ?><span class="snapshot-count pull-right"><?= snapshots_with_same_window_count + 1 ?></span><? }
+?></div>
 <? } ?>
 
 <div class="row" id="row-<?= i ?>">
 
 <span class="window main">
-<span class="opener"><span class="glyphicon glyphicon-plus"></span></span>
-<span class="window-software"><?= snap.software ?></span> 
-<span class="window-title"><?= snap.title ?></span>
+	<span class="opener"><span class="glyphicon glyphicon-plus"></span></span>
+	<span class="window-software"><?= snap.software ?></span> 
+	<span class="window-title"><?= snap.title ?> - <span class="window-count glyphicon glyphicon-th"><?= windows.length ?></span></span>
+
+	<ul class="window-all">
+		<li><?- windows.join("</li>\n		<li>") ?></li> 
+	</ul>
 </span><br />
-	<div class="repeat-snapshots">
-<? 	
+
+<div class="repeat-snapshots"><? 	
 		last_snapshot_software = snap.software;
 		snapshots_with_same_window_count = 0;
 		snapshot_from = snap.taken_at;
@@ -74,6 +86,7 @@ if(last_snapshot_software != "activex-holder-text") { ?>
 if(snapshots.length == 0) { ?>
 <p class="text-center">No records found for today.</p>
 <? } ?>
+
 </div>
 
 <script src="js/index.js" type="text/javascript"></script>

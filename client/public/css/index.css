@@ -17,6 +17,9 @@
 .repeat-snapshots span {
 	font-size:14px;
 }
+.window-all {
+	display: none;
+}
 
 div.selected {
 	background-color: #c6dcff;
