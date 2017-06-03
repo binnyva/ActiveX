@@ -11,7 +11,7 @@ function main(req, res, app, db, moment) {
 	if(date_raw) date = moment(date_raw);
 
 	var where = {taken_at: {$gte: date.startOf('day').toDate(), $lt: date.endOf('day').toDate()}};
-	var query = db.collection('Snapshot').find(where).sort({'taken_at': -1});
+	var query = db.collection('Snapshot').find(where).sort({'taken_at': 1});
 
 	sync.fiber(function() {
 		var result = sync.await(query.toArray(sync.defer())); // This await/defer syntax will make this code syncronomous. Otherwise, callback hell.
@@ -32,4 +32,3 @@ function main(req, res, app, db, moment) {
 	});
 }
 module.exports.main = main;
-

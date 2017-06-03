@@ -9,6 +9,7 @@ var connect = Promise.promisify(MongoClient.connect);
 connect('mongodb://localhost:27017/ActiveX').then(main, handleError);
 
 var active_window, tty = 'terminal';
+var ruleset = require("../config/ruleset.json");
 
 function main(database) {
 	db = database;
@@ -90,7 +91,24 @@ function getAllWindows(stdout, stderr) {
 	snapshot.taken_at = new Date();
 	snapshot.tags = [];
 
-	console.log(snapshot);
+	var concentration_details = [];
+	var concentration_score = 0;
+
+	for (var index in ruleset) {
+		var rule = ruleset[index];
+		var score = matchSoftware(rule, snapshot, all_windows);
+		if(score) {
+			concentration_details.push(index + ": " + score);
+			concentration_score += Number(score);
+		}
+	}
+
+	if(concentration_score > 10) concentration_score = 10;
+	else if(concentration_score < 1) concentration_score = 1;
+
+	snapshot.concentration = concentration_score;
+
+	exec("kdialog --passivepopup 'Score : "+concentration_score + "\n" + concentration_details.join("\n") +"' 3");
 
 	var snapshot_collection = db.collection("Snapshot");
 	snapshot_collection.insertOne(snapshot, {}).then(function() {
@@ -104,6 +122,55 @@ function getAllWindows(stdout, stderr) {
 		// Insert all - with insert id of the active windows
 		snapshot_window.insertMany(all_windows, {}).then(allDone).catch(handleError);
 	}).catch(handleError);
+	// allDone();
+}
+
+function matchSoftware(rule, snapshot, all_windows) {
+	var active_desktop = snapshot.active_desktop;
+
+	// Check active window if we have an active rule
+	if(rule.point.hasOwnProperty("active")) {
+		var match = isMatchSoftwareAndTitle(snapshot, rule);
+		// console.log(snapshot,rule, match, rule.point.active);
+		if(match) return rule.point.active;
+	}
+
+	// Check other windows.
+	if(rule.point.hasOwnProperty("active_desktop") || rule.point.hasOwnProperty("other_desktop")) {
+		for(var j=0; j<all_windows.length; j++) { // Go thur each window in the open list.
+			var window = all_windows[j];
+			var match = isMatchSoftwareAndTitle(window, rule);
+			if(match) {
+				// We have a software that matches the software in the rule - and it is on the active desktop
+				if(rule.point.hasOwnProperty("active_desktop") && window.desktop == active_desktop) {
+					return rule.point.active_desktop;
+				}
+
+				// Software that matches the software in the rule - and it is NOT on the active desktop
+				if(rule.point.hasOwnProperty("other_desktop") && window.desktop != active_desktop) {
+					return rule.point.other_desktop;
+				}
+			}
+		}
+	}
+}
+
+function isMatchSoftwareAndTitle(window, rule) {
+	for (var i = 0; i < rule.software.length; i++) { // Go thru all the softwares given in the rule...
+		if(window.software.toLowerCase().indexOf(rule.software[i].toLowerCase()) !== -1) { // Got a software match.
+			// Since we got a software match, go thru the titles...
+			if(rule.title.length == 0) return true; // No title rule.
+
+			// IF there is a title check, the check for title matches
+			for (var j = 0; j < rule.title.length; j++) { 
+				if(window.title.toLowerCase().indexOf(rule.title[j].toLowerCase()) !== -1) { // Got a title.
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 function allDone() {

@@ -20,6 +20,9 @@ tomorrow.add(1, 'days');
 var last_snapshot_software = 'activex-holder-text';
 var snapshot_from = '';
 var snapshots_with_same_window_count = 0;
+var dark_time_count = 0;
+var total_concentration = 0;
+var concentration_snapshot_count = 0;
 
 snapshot_loop:
 for(var i=0; i<snapshots.length; i++) {
@@ -30,6 +33,11 @@ for(var i=0; i<snapshots.length; i++) {
 		return all_windows;
 	}, []);
 
+	if(snap.active_desktop != -1) {
+		total_concentration += snap.concentration;
+		concentration_snapshot_count++;
+	}
+
 	if(snap.software == last_snapshot_software) { // Repeats are shown here.
 		snapshots_with_same_window_count++;
 		// snapshot_from = snap.taken_at;
@@ -37,7 +45,10 @@ for(var i=0; i<snapshots.length; i++) {
 
 	<span class="window">
 		<span class="window-software"><?= snap.software ?></span> 
-		<span class="window-title"><?= snap.title ?> - <span class="window-count glyphicon glyphicon-th"><?= windows.length ?></span></span>
+		<span class="window-title"><?= snap.title ?>
+			- <span class="window-count glyphicon glyphicon-th"><?= windows.length ?></span>
+			/ <span class="concentration glyphicon glyphicon-screenshot"><?= snap.concentration ?></span>
+		</span>
 		<ul class="window-all">
 			<li><?- windows.join("</li>\n			<li>") ?></li> 
 		</ul>
@@ -59,18 +70,33 @@ for(var i=0; i<snapshots.length; i++) {
 		if(last_snapshot_software != "activex-holder-text") { ?>
 </div>
 <input type="checkbox" name="snapshot[]" class="row-selector" value="1" />
-<span class="snapshot-time"><?= moment(snap.taken_at).format('LT') + " - " + moment(snapshot_from).format('LT'); ?></span>
+<span class="snapshot-time"><?= moment(snapshot_from).format('LT') + " - " + moment(snap.taken_at).format('LT'); ?></span>
 
-<? 			if(snapshots_with_same_window_count) { ?><span class="snapshot-count pull-right"><?= snapshots_with_same_window_count + 1 ?></span><? }
-?></div>
-<? } ?>
+<? 			if(snapshots_with_same_window_count) { ?><span class="snapshot-count pull-right"><?= snapshots_with_same_window_count + 1 ?></span><? } ?>
+</div>
+<? }
+
+// Show dark time.
+if(snapshots[i+1] && snapshots[i+1].active_desktop == -1) {
+	var dark_time_flag = true;
+	?><div class="row" id="row-<?= i ?>"><?
+	while(dark_time_flag) {
+		i++;
+		if(snapshots[i].active_desktop != -1) dark_time_flag = false;
+	}
+	?></div><?
+}
+?>
 
 <div class="row" id="row-<?= i ?>">
 
 <span class="window main">
 	<span class="opener"><span class="glyphicon glyphicon-plus"></span></span>
 	<span class="window-software"><?= snap.software ?></span> 
-	<span class="window-title"><?= snap.title ?> - <span class="window-count glyphicon glyphicon-th"><?= windows.length ?></span></span>
+	<span class="window-title"><?= snap.title ?>
+		- <span class="window-count glyphicon glyphicon-th"><?= windows.length ?></span>
+		/ <span class="concentration glyphicon glyphicon-screenshot"><?= snap.concentration ?></span>
+	</span>
 
 	<ul class="window-all">
 		<li><?- windows.join("</li>\n		<li>") ?></li> 
@@ -85,8 +111,18 @@ for(var i=0; i<snapshots.length; i++) {
 }
 if(snapshots.length == 0) { ?>
 <p class="text-center">No records found for today.</p>
-<? } ?>
-
+<? }  ?>
 </div>
+</div>
+
+<? 
+var precision = 2;
+var factor = Math.pow(10, precision);
+var temp_number = (total_concentration / concentration_snapshot_count) * factor;
+var rounded = Math.round(temp_number);
+var concentration_avg = rounded / factor;
+?>
+<h3>Concentration : <span class="glyphicon glyphicon-screenshot" title="<?= total_concentration + "/" + concentration_snapshot_count ?>"></span> 
+	<?= concentration_avg ?></h3>
 
 <script src="js/index.js" type="text/javascript"></script>
