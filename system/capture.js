@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 var exec = Promise.promisify(require('child_process').exec);
+var sync = require('synchronize');
 
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
@@ -55,7 +56,6 @@ function getAllWindows(stdout, stderr) {
 		if(parts.length == 2) {
 			title = parts[0];
 			app = parts[1];
-
 		} else if(parts.length > 2) {
 			app = parts[parts.length - 1];
 			title = parts.slice(0, -1).join(" - ");
@@ -92,7 +92,7 @@ function getAllWindows(stdout, stderr) {
 	snapshot.tags = [];
 
 	var concentration_details = [];
-	var concentration_score = 0;
+	var concentration_score = 5; // Default sore is 5.
 
 	for (var index in ruleset) {
 		var rule = ruleset[index];
@@ -103,12 +103,37 @@ function getAllWindows(stdout, stderr) {
 		}
 	}
 
+	// Score should be 1-10
 	if(concentration_score > 10) concentration_score = 10;
 	else if(concentration_score < 1) concentration_score = 1;
 
 	snapshot.concentration = concentration_score;
 
-	exec("kdialog --passivepopup 'Score : "+concentration_score + "\n" + concentration_details.join("\n") +"' 3");
+	// Figure out the daily average for concentration
+	var start = new Date(); start.setHours(0,0,0,0);
+	var end = new Date(); end.setHours(23,59,59,999);
+	var where = {taken_at: {$gte: start, $lt: end}}; // All Snapshots for today.
+	var query = db.collection('Snapshot').find(where);
+	var total_concentration = 0;
+	var concentration_snapshot_count = 0;
+
+	sync.fiber(function() {
+		var result = sync.await(query.toArray(sync.defer())); // This await/defer syntax will make this code syncronomous. Otherwise, callback hell.
+
+	 	for(var i=0; i<result.length; i++) {
+	 		var snap = result[i];
+			if(snap.active_desktop != -1) {
+				total_concentration += snap.concentration;
+				concentration_snapshot_count++;
+			}
+		}
+
+		var factor = 100; // Round till 2 decimals - 10 ^ 2.
+		var temp_number = (total_concentration / concentration_snapshot_count) * factor;
+		var concentration_avg = Math.round(temp_number) / factor;
+
+		exec("kdialog --passivepopup 'Score : "+concentration_score + "\nDaily Average: "+concentration_avg+"\n" + concentration_details.join("\n") + "' 3");
+	});
 
 	var snapshot_collection = db.collection("Snapshot");
 	snapshot_collection.insertOne(snapshot, {}).then(function() {
@@ -131,7 +156,6 @@ function matchSoftware(rule, snapshot, all_windows) {
 	// Check active window if we have an active rule
 	if(rule.point.hasOwnProperty("active")) {
 		var match = isMatchSoftwareAndTitle(snapshot, rule);
-		// console.log(snapshot,rule, match, rule.point.active);
 		if(match) return rule.point.active;
 	}
 

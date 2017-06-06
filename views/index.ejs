@@ -116,11 +116,9 @@ if(snapshots.length == 0) { ?>
 </div>
 
 <? 
-var precision = 2;
-var factor = Math.pow(10, precision);
+var factor = 100; // Round till 2 decimals - 10 ^ 2.
 var temp_number = (total_concentration / concentration_snapshot_count) * factor;
-var rounded = Math.round(temp_number);
-var concentration_avg = rounded / factor;
+var concentration_avg = Math.round(temp_number) / factor;
 ?>
 <h3>Concentration : <span class="glyphicon glyphicon-screenshot" title="<?= total_concentration + "/" + concentration_snapshot_count ?>"></span> 
 	<?= concentration_avg ?></h3>

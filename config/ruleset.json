@@ -4,43 +4,42 @@
 		"title": ["youtube", "9gag", "reddit"],
 		"point": {
 			"active":		"-7",
-			"active_desktop": "-5",
-			"other_desktop": "-2"
+			"active_desktop": "-4",
+			"other_desktop": "-1"
 		}
 	},
 	"social_media": {
 		"software": ["firefox", "chrome"],
 		"title": ["facebook", "tweetdeck", "twitter", "instagram"],
 		"point": {
-			"active":		"-6",
-			"active_desktop": "-4",
-			"other_desktop": "-2"
+			"active":		"-3",
+			"active_desktop": "-2",
+			"other_desktop": "-1"
 		}
 	},
 	"communication": {
 		"software": ["firefox", "chrome"],
 		"title": ["binnyva@gmail", "whatsapp"],
 		"point": {
-			"active":		"-2",
-			"active_desktop": "-2",
-			"other_desktop": "-1"
+			"active":		"-1",
+			"active_desktop": "-1",
+			"other_desktop": "0"
 		}
 	},
 	"work_communication": {
 		"software": ["firefox", "chrome"],
 		"title": ["binnyva@makeadiff"],
 		"point": {
-			"active":		"+2",
-			"active_desktop": "+2",
-			"other_desktop": "+1"
+			"active":		"+1",
+			"active_desktop": "+1"
 		}
 	},
 	"tools": {
 		"software": ["firefox", "chrome"],
 		"title": ["habitica", "todoist", "trello"],
 		"point": {
-			"active":		"+2",
-			"active_desktop": "+2",
+			"active":		"+1",
+			"active_desktop": "+1",
 			"other_desktop": "+1"
 		}
 	},
@@ -48,40 +47,39 @@
 		"software": ["sublime"],
 		"title": [],
 		"point": {
-			"active":		"+7",
-			"active_desktop": "+6"
+			"active":		"+4",
+			"active_desktop": "+3"
 		}
 	},
 	"docs": {
 		"software": ["firefox", "chrome"],
-		"title": ["google sheets", "google drive", "google slides"],
+		"title": ["google sheets", "google drive", "google slides", "smartsheet"],
 		"point": {
-			"active":		"+5",
-			"active_desktop": "+4"
+			"active":		"+3",
+			"active_desktop": "+2"
 		}
 	},
 	"database": {
 		"software": ["firefox", "chrome"],
 		"title": ["Project_Madapp", "makeadiff_", "Project_Donut"],
 		"point": {
-			"active":		"+5",
-			"active_desktop": "+4"
+			"active":		"+3",
+			"active_desktop": "+2"
 		}
 	},
 	"other_konsole": {
 		"software": ["konsole"],
 		"title": [],
 		"point": {
-			"active_desktop": "+2",
-			"other_desktop": "+1"
+			"active_desktop": "+1"
 		}
 	},
 	"other_smplayer": {
 		"software": ["smplayer"],
 		"title": [],
 		"point": {
-			"active_desktop": "-5",
-			"other_desktop": "-3"
+			"active_desktop": "-3",
+			"other_desktop": "-2"
 		}
 	}
 }
