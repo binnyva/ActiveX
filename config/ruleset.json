@@ -67,6 +67,22 @@
 			"active_desktop": "+2"
 		}
 	},
+	"mad_work": {
+		"software": ["firefox", "chrome"],
+		"title": ["madapp","make a difference", "recruitment", "mad", "volunteer"],
+		"point": {
+			"active":		"+3",
+			"active_desktop": "+2"
+		}
+	},
+	"games": {
+		"software": ["steam", "ftl"],
+		"title": ["ftl", "steam"],
+		"point": {
+			"active":		"-7",
+			"other_desktop": "-5"
+		}
+	},
 	"other_konsole": {
 		"software": ["konsole"],
 		"title": [],
