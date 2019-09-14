@@ -1,0 +1,27 @@
+												Same Desktop	Different Desktop
+-------------------------------------------------------------------------------
+Firefox/Chrome
+	Entertainment									-5				-2
+		Youtube, 9gag,								
+	Social Media									-4				-2
+		Facebook, Twitter, 	
+	Communication									-1
+		Gmail, Whatsapp,
+	Tools											-1
+		HabitRPG, Todoist, Trello, Drive
+	Work											+3
+		Madapp, makeadiff.in, localhost areas
+
+Sublime
+	Work Project									+7
+	Personal Project								+6
+
+Others
+	Konsole											+2
+	SMPlayer										-7				-5
+	Konqueror										
+	Gwenview
+
+
+Unknown Windows
+Dark Time											 = -1

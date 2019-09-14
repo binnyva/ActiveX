@@ -1,10 +1,10 @@
 const ObjectId = require('mongodb').ObjectID;
-var sync = require('synchronize');
+//var sync = require('synchronize');
 
 console.log("Index");
 
 var snapshots = [];
-function main(req, res, app, db, moment) {
+async function main(req, res, app, db, moment) {
 	var full_disclosure = (typeof req.query.full_disclosure != "undefined") ? req.query.full_disclosure : true;
 	var date_raw = (typeof req.query.date != "undefined") ? req.query.date : false;
 	var date = moment();
@@ -13,11 +13,16 @@ function main(req, res, app, db, moment) {
 	var where = {taken_at: {$gte: date.startOf('day').toDate(), $lt: date.endOf('day').toDate()}};
 	var query = db.collection('Snapshot').find(where).sort({'taken_at': 1});
 
-	sync.fiber(function() {
-		var result = sync.await(query.toArray(sync.defer())); // This await/defer syntax will make this code syncronomous. Otherwise, callback hell.
+	console.log(`Finding data on ${date_raw} `, where);
 
+	var response = await query.toArray(); // This await/defer syntax will make this code syncronomous. Otherwise, callback hell.
+	if(response.err) throw response.err;
+	else {
+		var result = response;
+		console.log(`Got ${result.length} snapshots`);
 	 	for(var i=0; i<result.length; i++) {
-			var windows = sync.await(db.collection('SnapshotWindow').find({snapshot: ObjectId(result[i]._id)}).toArray(sync.defer()));
+			var windows = await db.collection('SnapshotWindow').find({snapshot: ObjectId(result[i]._id)}).toArray();
+			// console.log(`Got ${windows.length} windows`);
 			result[i].windows = windows;
 		}
 
@@ -27,8 +32,11 @@ function main(req, res, app, db, moment) {
 			date: date,
 			full_disclosure: full_disclosure,
 			view: 'index.ejs', 
+			res: res,
 			config: {'site_url': '', site_title: "ActiveX", 'site_home': '/'}
 		});
-	});
+	}
+	
+	return true;
 }
 module.exports.main = main;

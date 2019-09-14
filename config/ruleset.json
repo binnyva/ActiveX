@@ -36,7 +36,7 @@
 	},
 	"tools": {
 		"software": ["firefox", "chrome"],
-		"title": ["habitica", "todoist", "trello"],
+		"title": ["habitica", "todoist", "trello", "toggl"],
 		"point": {
 			"active":		"+1",
 			"active_desktop": "+1",

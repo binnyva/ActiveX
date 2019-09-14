@@ -1,6 +1,6 @@
 const Promise = require('bluebird');
 var exec = Promise.promisify(require('child_process').exec);
-var sync = require('synchronize');
+//  var sync = require('synchronize');
 
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
@@ -117,8 +117,9 @@ function getAllWindows(stdout, stderr) {
 	var total_concentration = 0;
 	var concentration_snapshot_count = 0;
 
-	sync.fiber(function() {
-		var result = sync.await(query.toArray(sync.defer())); // This await/defer syntax will make this code syncronomous. Otherwise, callback hell.
+
+	query.toArray(function(err, result) {
+		if(err) throw err;
 
 	 	for(var i=0; i<result.length; i++) {
 	 		var snap = result[i];

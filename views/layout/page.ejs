@@ -3,27 +3,27 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title><?= config['site_title'] ?></title>
-<link href="<?= config['site_url'] ?>css/style.css" rel="stylesheet" type="text/css" />
-<link href="<?= config['site_url'] ?>images/silk_theme.css" rel="stylesheet" type="text/css" />
-<link href="<?= config['site_url'] ?>bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
-<link href="<?= config['site_url'] ?>bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
+<title><%= config['site_title'] %></title>
+<link href="<%= config['site_url'] %>css/style.css" rel="stylesheet" type="text/css" />
+<link href="<%= config['site_url'] %>images/silk_theme.css" rel="stylesheet" type="text/css" />
+<link href="<%= config['site_url'] %>bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="<%= config['site_url'] %>bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
 
-<script src="<?= config['site_url'] ?>jquery/dist/jquery.min.js" type="text/javascript"></script>
-<script src="<?= config['site_url'] ?>bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="<?= config['site_url'] ?>js/application.js" type="text/javascript"></script>
+<script src="<%= config['site_url'] %>jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="<%= config['site_url'] %>bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<%= config['site_url'] %>js/application.js" type="text/javascript"></script>
 
 </head>
 <body>
 <div id="loading">loading...</div>
 <div class="container">
 <div id="header">
-<h1 id="logo"><a href="<?= config['site_home']; ?>"><?= config['site_title'] ?></a></h1>
+<h1 id="logo"><a href="<%= config['site_home']; %>"><%= config['site_title'] %></a></h1>
 </div>
 
 <div id="content">
 <!-- Begin Content -->
-<?- include("../" + view, {snapshots: snapshots, moment: moment}); ?>
+<%- include('../' + view, {'snapshots': snapshots, 'moment': moment}); %>
 <!-- End Content -->
 </div>
 
