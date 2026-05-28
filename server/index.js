@@ -20,9 +20,10 @@ async function main(req, res, app, db, moment) {
 	else {
 		var result = response;
 		console.log(`Got ${result.length} snapshots`);
+	
 	 	for(var i=0; i<result.length; i++) {
 			var windows = await db.collection('SnapshotWindow').find({snapshot: ObjectId(result[i]._id)}).toArray();
-			// console.log(`Got ${windows.length} windows`);
+			console.log(`Got ${i+1}/${result.length} - with ${windows.length} windows`);
 			result[i].windows = windows;
 		}
 
